@@ -47,7 +47,7 @@ class App extends Component {
     let lastDigit = this.state.currentValue.slice(-1);
 
     // if the last entered digit was an operator then it replaces that operator with a new operator or if not then adds the operator to the display
-    if(lastDigit === 'x' || lastDigit === '-' || lastDigit === '/' || lastDigit === '+'){
+    if(lastDigit === '*' || lastDigit === '-' || lastDigit === '/' || lastDigit === '+'){
       this.setState({currentValue: this.state.currentValue.slice(0, -1) + currOperand});
     }
       this.setState({currentValue: this.state.currentValue + currOperand});
@@ -80,7 +80,7 @@ class App extends Component {
             <button className="button" id="seven" onClick={() => this.handleDisplayedValue('7')}>7</button>
             <button className="button" id="eight"onClick={() => this.handleDisplayedValue('8')}>8</button>
             <button className="button" id="nine" onClick={() => this.handleDisplayedValue('9')}>9</button>
-            <button className="button" id="multiply" onClick={() => this.handleDisplayOperand('x')}>x</button>
+            <button className="button" id="multiply" onClick={() => this.handleDisplayOperand('*')}>*</button>
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
