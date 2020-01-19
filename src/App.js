@@ -3,68 +3,27 @@ import 'bulma/css/bulma.css'
 import ReactFCCtest from 'react-fcctest';
 import { evaluate} from 'mathjs';
 
+//define regexp check
+const isOperand = /[x/+-]/;
+const endsWithNegativeOperand = /[x/+]-$/;
+const endsWithOperand = /[x+-/]$/;
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       currentValue: '0',
-      hasDecimal: false
+      previousValue: '0',
+      formula: '',
+      currentSign: 'positive',
+      lastValue: ''
     }
 
-    this.handleCalculatorCLear = this.handleCalculatorClear.bind(this);
-    this.handleDisplayedValue = this.handleDisplayedValue.bind(this);
-    this.handleDisplayDecimal = this.handleDisplayDecimal.bind(this);
-    this.handleCalculation = this.handleCalculation.bind(this);
   }
 
-  handleCalculatorClear() {
-    this.setState({
-      currentValue: '0',
-      currentTotal: ''
-    })
-  }
-
-  handleDisplayedValue(value) {
-    if(value === '0'){
-      this.setState({currentValue: this.state.currentValue === '0' ? '0' : this.state.currentValue + value});
-    } else {
-      this.setState({currentValue: this.state.currentValue === '0' ? value : this.state.currentValue + value});
-    }  
-  } 
-
-  handleDisplayDecimal() {
-    if(this.state.hasDecimal === false){
-      this.setState({currentValue: this.state.currentValue + '.',
-                     hasDecimal: true
-                    });
-    }
-  }
-
-  handleDisplayOperand(operand) {
-    let currOperand = operand;
-    // string manipulation to check the last digit in the display
-    let lastDigit = this.state.currentValue.slice(-1);
-
-    // if the last entered digit was an operator then it replaces that operator with a new operator or if not then adds the operator to the display
-    if(lastDigit === '*' || lastDigit === '-' || lastDigit === '/' || lastDigit === '+'){
-      this.setState({currentValue: this.state.currentValue.slice(0, -1) + currOperand});
-    }
-      this.setState({currentValue: this.state.currentValue + currOperand});
-
-    // once an operator has been pressed then this allows the decimal key to become active again
-    this.setState({hasDecimal: false});
-  }
-
-  handleCalculation() {
-    let calculatedSum = evaluate(this.state.currentValue).toString();
-    this.setState({
-      currentValue: calculatedSum,
-       displayDecimal: true
-      });
-  }
   
-  
+
   render() {
   return (
     <div className="App">
@@ -73,38 +32,39 @@ class App extends Component {
       <div className="level">
           <div className="level-item">
             <h2 className="has-background-black has-text-danger" id="display">{this.state.currentValue}</h2>
+            <h2 className="has-background-black has-text-danger" id="formula">{this.state.formula}</h2>
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
           <div className="level-item">
-            <button className="button" id="seven" onClick={() => this.handleDisplayedValue('7')}>7</button>
-            <button className="button" id="eight"onClick={() => this.handleDisplayedValue('8')}>8</button>
-            <button className="button" id="nine" onClick={() => this.handleDisplayedValue('9')}>9</button>
-            <button className="button" id="multiply" onClick={() => this.handleDisplayOperand('*')}>*</button>
+            <button className="button" id="seven" onClick={() => this.handleNumber('7')}>7</button>
+            <button className="button" id="eight"onClick={() => this.handleNumber('8')}>8</button>
+            <button className="button" id="nine" onClick={() => this.handleNumber('9')}>9</button>
+            <button className="button" id="multiply" onClick={() => this.handleOperands('*')}>*</button>
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
           <div className="level-item">
-            <button className="button" id="four" onClick={() => this.handleDisplayedValue('4')}>4</button>
-            <button className="button" id="five"onClick={() => this.handleDisplayedValue('5')}>5</button>
-            <button className="button" id="six"onClick={() => this.handleDisplayedValue('6')}>6</button>
-            <button className="button" id="subtract" onClick={() => this.handleDisplayOperand('-')}>-</button>
+            <button className="button" id="four" onClick={() => this.handleNumber('4')}>4</button>
+            <button className="button" id="five"onClick={() => this.handleNumber('5')}>5</button>
+            <button className="button" id="six"onClick={() => this.handleNumber('6')}>6</button>
+            <button className="button" id="subtract" onClick={() => this.handleOperands('-')}>-</button>
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
           <div className="level-item">
-            <button className="button" id="one"onClick={() => this.handleDisplayedValue('1')}>1</button>
-            <button className="button" id="two"onClick={() => this.handleDisplayedValue('2')}>2</button>
-            <button className="button" id="three"onClick={() => this.handleDisplayedValue('3')}>3</button>
-            <button className="button" id="add" onClick={() => this.handleDisplayOperand('+')}>+</button>
+            <button className="button" id="one"onClick={() => this.handleNumber('1')}>1</button>
+            <button className="button" id="two"onClick={() => this.handleNumber('2')}>2</button>
+            <button className="button" id="three"onClick={() => this.handleNumber('3')}>3</button>
+            <button className="button" id="add" onClick={() => this.handleOperands('+')}>+</button>
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
           <div className="level-item">
-            <button className="button" id="zero" onClick={() => this.handleDisplayedValue('0')}>0</button>
-            <button className="button" id="decimal" onClick={() => this.handleDisplayDecimal()}>.</button>
-            <button className="button" id="clear" onClick={this.handleCalculatorCLear}>AC</button>
-            <button className="button" id="divide" onClick={() => this.handleDisplayOperand('/')}>/</button>
+            <button className="button" id="zero" onClick={() => this.handleNumber('0')}>0</button>
+            <button className="button" id="decimal" onClick={() => this.handleDecimal()}>.</button>
+            <button className="button" id="clear" onClick={() => this.handleCalculatorClear()}>AC</button>
+            <button className="button" id="divide" onClick={() => this.handleOperands('/')}>/</button>
             <button className="button" id="equals" onClick={this.handleCalculation}>=</button>
           </div>
         </div>
