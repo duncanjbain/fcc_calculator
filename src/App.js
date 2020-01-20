@@ -21,7 +21,6 @@ class App extends Component {
     })
   }
 
-
   handleNumber(event) {
     let target = event.target.value;
 
@@ -82,6 +81,7 @@ class App extends Component {
           <div className="level-item">
             {this.state.currentValue=='' ? <p className="has-background-black has-text-danger" id="display">0</p> : 
             <p className="has-background-black has-text-danger" id="display">{this.state.currentValue}</p> }
+            
           </div>
         </div>
         <div className="level is-marginless is-paddingless">
