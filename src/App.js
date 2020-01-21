@@ -23,33 +23,34 @@ class App extends Component {
 
   handleNumber(event) {
     let target = event.target.value;
-
-    if(target == '0' && this.state.currentValue == 0) {
+    let { currentValue, previousValue } = this.state;
+    if(target == '0' && currentValue == 0) {
       this.setState({
         currentValue: 0
       })
-    } else if(target == '.' && this.state.previousValue.includes('.')) {
+    } else if(target == '.' && previousValue.includes('.')) {
       this.setState({
         previousValue: '.'
       })
     } else {
       this.setState({
-        currentValue: this.state.currentValue + target,
-        previousValue: this.state.previousValue + target,
+        currentValue: currentValue + target,
+        previousValue: previousValue + target,
       })
     }
   }
   
   handleOperands(event) {
+    let { currentValue, previousValue } = this.state;
     let target = event.target.value;
-    let number = this.state.currentValue;
+    let number = currentValue;
 
     if(target === '-') {
       this.setState({
         currentValue: number + target,
         previousValue: target
       })
-    } else if(this.state.previousValue == '+' || this.state.previousValue == '*' || this.state.previousValue == '/' || this.state.previousValue == '-') {
+    } else if(previousValue == '+' || previousValue == '*' || previousValue == '/' || previousValue == '-') {
       this.setState({
         currentValue: number.replace(/[*\-/+]/g, '') + target,
         previousValue: event.target.value
@@ -64,8 +65,8 @@ class App extends Component {
 
 
   handleEvaluation() {
-    
-    let answer = evaluate(this.state.currentValue);
+    let { currentValue } = this.state;
+    let answer = evaluate(currentValue);
     this.setState({
       currentValue: answer,
       previousValue: answer
